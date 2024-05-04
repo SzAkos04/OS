@@ -1,19 +1,19 @@
 [org 0x7c00]
 KERNEL_OFFSET equ 0x1000
 
-    mov [BOOT_DRIVE], dl
+mov [BOOT_DRIVE], dl
 
-    mov bp, 0x9000
-    mov sp, bp
+mov bp, 0x9000
+mov sp, bp
 
-    mov bx, MSG_REAL_MODE
-    call print_str
+mov bx, MSG_REAL_MODE
+call print_str
 
-    call load_kernel
+call load_kernel
 
-    call switch_to_pm
+call switch_to_pm
 
-    jmp $
+jmp $
 
 %include "src/print_str.asm"
 %include "src/disk.asm"
@@ -31,6 +31,11 @@ load_kernel:
     mov dh, 15
     mov dl, [BOOT_DRIVE]
     call disk_load
+
+    ; change to vga mode 0x13
+    mov ah, 0x00
+    mov al, 0x13
+    int 0x10
 
     ret
 
