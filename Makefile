@@ -10,7 +10,7 @@ QEMUFLAGS := -drive if=floppy,format=raw
 SRC_DIR := src
 BUILD_DIR := build
 C_SRC := $(shell find $(SRC_DIR) -type f -name '*.c')
-OBJ := $(patsubst $(SRC_DIR)/%.c, $(BUILD_DIR)/%.o, $(C_SRC))
+OBJ := $(BUILD_DIR)/kernel_entry.o $(patsubst $(SRC_DIR)/%.c, $(BUILD_DIR)/%.o, $(C_SRC))
 BOOTLOADER := $(SRC_DIR)/bootloader.asm
 ISO := $(BUILD_DIR)/boot/boot.iso
 .PHONY: all build run clean
@@ -25,6 +25,10 @@ $(ISO): $(BUILD_DIR)/$(PROJECT).bin $(BUILD_DIR)/kernel.bin
 $(BUILD_DIR)/$(PROJECT).bin: $(BOOTLOADER)
 	@mkdir -p $(@D)
 	$(ASM) $(ASMFLAGS) $< -o $@
+
+$(BUILD_DIR)/kernel_entry.o: $(SRC_DIR)/kernel/kernel_entry.asm
+	@mkdir -p $(@D)
+	$(ASM) -f elf32 $< -o $@
 
 $(BUILD_DIR)/%.o: $(SRC_DIR)/%.c
 	@mkdir -p $(@D)
