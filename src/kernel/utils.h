@@ -10,7 +10,7 @@ typedef short i16;
 typedef int i32;
 typedef u32 size_t;
 
-byte inportb(u16 port);
+static byte inportb(u16 port);
 
 void outportb(u16 port, u8 data);
 
@@ -19,3 +19,5 @@ u8 inportw(u16 port);
 void outportw(u16 port, u16 data);
 
 size_t strlen(const char *str);
+
+void memset(void *dst, u8 value, size_t n);

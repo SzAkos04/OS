@@ -2,6 +2,9 @@
 
 #include "utils.h"
 
+#define SCREEN_WIDTH 320
+#define SCREEN_HEIGHT 200
+
 #define BLACK 0x00
 #define BLUE 0x01
 #define GREEN 0x02
@@ -18,6 +21,8 @@
 #define LIGHT_MAGENTA 0x0d
 #define YELLOW 0x0e
 #define WHITE 0x0f
+
+void screen_init(void);
 
 void putpixel(int pos_x, int pos_y, u8 VGA_COLOR);
 
