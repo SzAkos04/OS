@@ -138,21 +138,6 @@ const u8 font[128][FONT_SIZE] = {
     {0x6E, 0x3B, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00}, // U+007E (~)
     {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00}};
 
-#define COLOR(_r, _g, _b)                                                      \
-    ((u8)((((_r) & 0x7) << 5) | (((_g) & 0x7) << 2) | (((_b) & 0x3) << 0)))
-
-#define COLOR_R(_index) (((_index) >> 5) & 0x7)
-#define COLOR_G(_index) (((_index) >> 2) & 0x7)
-#define COLOR_B(_index) (((_index) >> 0) & 0x3)
-
-#define COLOR_ADD(_index, _d)                                                  \
-    __extension__({                                                            \
-        __typeof__(_index) _c = (_index);                                      \
-        __typeof__(_d) __d = (_d);                                             \
-        COLOR(CLAMP(COLOR_R(_c) + __d, 0, 7), CLAMP(COLOR_G(_c) + __d, 0, 7),  \
-              CLAMP(COLOR_B(_c) + __d, 0, 3));                                 \
-    })
-
 // VGA control port addresses
 #define PALETTE_MASK 0x3C6
 #define PALETTE_READ 0x3C7
@@ -191,7 +176,7 @@ void fill_screen(u8 VGA_COLOR) {
     }
 }
 
-void clear_screen(void) { fill_screen(BLACK); }
+void clear_screen(void) { fill_screen(COLOR(0, 0, 0)); }
 
 static void draw_h_line(int x1, int x2, int y, u8 VGA_COLOR) {
     for (int x = x1; x <= x2; x++) {

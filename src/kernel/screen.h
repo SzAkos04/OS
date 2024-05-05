@@ -5,22 +5,20 @@
 #define SCREEN_WIDTH 320
 #define SCREEN_HEIGHT 200
 
-#define BLACK 0x00
-#define BLUE 0x01
-#define GREEN 0x02
-#define CYAN 0x03
-#define RED 0x04
-#define MAGENTA 0x05
-#define BROWN 0x06
-#define LIGHT_GREY 0x07
-#define GREY 0x08
-#define LIGHT_BLUE 0x09
-#define LIGHT_GREEN 0x0a
-#define LIGHT_CYAN 0x0b
-#define LIGHT_RED 0x0c
-#define LIGHT_MAGENTA 0x0d
-#define YELLOW 0x0e
-#define WHITE 0x0f
+#define COLOR(_r, _g, _b)                                                      \
+    ((u8)((((_r) & 0x7) << 5) | (((_g) & 0x7) << 2) | (((_b) & 0x3) << 0)))
+
+#define COLOR_R(_index) (((_index) >> 5) & 0x7)
+#define COLOR_G(_index) (((_index) >> 2) & 0x7)
+#define COLOR_B(_index) (((_index) >> 0) & 0x3)
+
+#define COLOR_ADD(_index, _d)                                                  \
+    __extension__({                                                            \
+        __typeof__(_index) _c = (_index);                                      \
+        __typeof__(_d) __d = (_d);                                             \
+        COLOR(CLAMP(COLOR_R(_c) + __d, 0, 7), CLAMP(COLOR_G(_c) + __d, 0, 7),  \
+              CLAMP(COLOR_B(_c) + __d, 0, 3));                                 \
+    })
 
 void screen_init(void);
 
