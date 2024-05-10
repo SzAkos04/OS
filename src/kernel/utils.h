@@ -1,4 +1,6 @@
 #define asm __asm__
+#define CLI() asm("cli")
+#define STI() asm("sti")
 
 typedef unsigned char byte;
 
@@ -10,7 +12,7 @@ typedef short i16;
 typedef int i32;
 typedef u32 size_t;
 
-static byte inportb(u16 port);
+byte inportb(u16 port);
 
 void outportb(u16 port, u8 data);
 

@@ -39,7 +39,7 @@ $(BUILD_DIR)/kernel.bin: $(OBJ)
 	$(LD) -o $@ $(LDFLAGS) $^
 
 run: build
-	@od -t x1 -A n $(BUILD_DIR)/$(PROJECT).bin
+	od -t x1 -A n $(BUILD_DIR)/$(PROJECT).bin
 	$(QEMU) $(QEMUFLAGS),file=$(ISO)
 
 clean:
