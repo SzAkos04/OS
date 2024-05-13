@@ -12,7 +12,7 @@ print_str_pm_loop:
 	mov ah, WHITE_ON_BLACK
 
 	cmp al, 0
-	je print_str_pm_done
+	je  print_str_pm_done
 
 	mov [edx], ax
 
