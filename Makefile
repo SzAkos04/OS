@@ -1,8 +1,7 @@
 PROJECT := OS
 ASM := nasm
-ASMFLAGS := -f bin
 CC := gcc
-CFLAGS := -m32 -ffreestanding -fno-pie
+CFLAGS := -m32 -ffreestanding -fno-pie -fno-builtin -nostdlib -Isrc/libc
 LD := ld
 LDFLAGS := -melf_i386 -Ttext 0x1000 --oformat binary
 QEMU := qemu-system-i386
@@ -10,8 +9,11 @@ QEMUFLAGS := -drive if=floppy,format=raw
 SRC_DIR := src
 BUILD_DIR := build
 C_SRC := $(shell find $(SRC_DIR) -type f -name '*.c')
-OBJ := $(BUILD_DIR)/kernel_entry.o $(patsubst $(SRC_DIR)/%.c, $(BUILD_DIR)/%.o, $(C_SRC))
+# this must be first, otherwise it breaks during linking
+OBJ := $(BUILD_DIR)/kernel_entry.o
+OBJ += $(patsubst $(SRC_DIR)/%.c, $(BUILD_DIR)/%.o, $(C_SRC))
 BOOTLOADER := $(SRC_DIR)/bootloader.asm
+KERNEL_ENTRY := $(SRC_DIR)/kernel/kernel_entry.asm
 ISO := $(BUILD_DIR)/boot/boot.iso
 .PHONY: all build run clean
 
@@ -19,28 +21,34 @@ all: build
 
 build: $(ISO)
 
-$(ISO): $(BUILD_DIR)/$(PROJECT).bin $(BUILD_DIR)/kernel.bin
+# create the final bootable `build/boot/boot.iso` file
+$(ISO): $(BUILD_DIR)/bootloader.bin $(BUILD_DIR)/kernel.bin
+	@mkdir -p $(@D)
 	cat $^ > $@
 
-$(BUILD_DIR)/$(PROJECT).bin: $(BOOTLOADER)
+# compile the bootloader
+$(BUILD_DIR)/bootloader.bin: $(BOOTLOADER)
 	@mkdir -p $(@D)
-	$(ASM) $(ASMFLAGS) $< -o $@
+	$(ASM) -f bin $< -o $@
 
-$(BUILD_DIR)/kernel_entry.o: $(SRC_DIR)/kernel/kernel_entry.asm
+# compile the kernel entry
+$(BUILD_DIR)/kernel_entry.o: $(KERNEL_ENTRY)
 	@mkdir -p $(@D)
 	$(ASM) -f elf32 $< -o $@
 
+# compile the kernel
 $(BUILD_DIR)/%.o: $(SRC_DIR)/%.c
 	@mkdir -p $(@D)
 	$(CC) $(CFLAGS) -c $< -o $@
 
+# link the kernel
 $(BUILD_DIR)/kernel.bin: $(OBJ)
 	@mkdir -p $(@D)
-	$(LD) -o $@ $(LDFLAGS) $^
+	$(LD) $(LDFLAGS) $^ -o $@
 
-run: build
-	od -t x1 -A n $(BUILD_DIR)/$(PROJECT).bin
-	$(QEMU) $(QEMUFLAGS),file=$(ISO)
+run: $(ISO)
+	$(QEMU) $(QEMUFLAGS),file=$<
 
 clean:
 	rm -rf $(BUILD_DIR)
+

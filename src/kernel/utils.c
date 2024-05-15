@@ -19,11 +19,3 @@ u8 inportw(u16 port) {
 void outportw(u16 port, u16 data) {
     asm("out %%ax, %%dx" : : "a"(data), "d"(port));
 }
-
-size_t strlen(const char *str) {
-    int l = 0;
-    while (*str++ != 0) {
-        l++;
-    }
-    return l;
-}

@@ -14,6 +14,10 @@
 #define GREEN COLOR(0, 7, 0)
 #define BLUE COLOR(0, 0, 3)
 
+#define YELLOW COLOR(7, 7, 0)
+#define MAGENTA COLOR(7, 0, 3)
+#define CYAN COLOR(0, 7, 3)
+
 extern u8 back_buf[SCREEN_HEIGHT][SCREEN_WIDTH];
 
 void screen_init(void);
