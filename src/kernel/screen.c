@@ -1,6 +1,6 @@
 #include "screen.h"
 
-#include "math.h"
+#include "../libc/math.h"
 #include "utils.h"
 
 #define VIDEO_ADDRESS 0xa0000
