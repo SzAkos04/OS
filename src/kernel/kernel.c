@@ -6,14 +6,20 @@ void _main_c() {
     screen_init();
     clear_screen();
 
-    draw_rect(50, 50, 100, 100, COLOR(7, 0, 0));
+    while (1) {
+        clear_buffer();
 
-    draw_line(50, 50, 75, 75, COLOR(7, 0, 0));
-    draw_line(50, 100, 75, 125, COLOR(7, 0, 0));
-    draw_line(100, 50, 125, 75, COLOR(7, 0, 0));
-    draw_line(100, 100, 125, 125, COLOR(7, 0, 0));
+        draw_rect(50, 50, 100, 100, RED);
 
-    draw_rect(75, 75, 125, 125, COLOR(7, 0, 0));
+        draw_line(50, 50, 75, 75, BLUE);
+        draw_line(50, 100, 75, 125, GREEN);
+        draw_line(100, 50, 125, 75, BLUE);
+        draw_line(100, 100, 125, 125, GREEN);
 
-    print_string("CUB", 65, 30, COLOR(7, 0, 0));
+        draw_rect(75, 75, 125, 125, RED);
+
+        print_string("CUB", 65, 30, WHITE);
+
+        swap_buffers();
+    }
 }
