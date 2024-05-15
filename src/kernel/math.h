@@ -33,5 +33,5 @@ double sqrt(double x);
 double tan(double x);
 double tanh(double x);
 
-int abs(double x);
+int abs(int x);
 int round(double x);

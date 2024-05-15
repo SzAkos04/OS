@@ -18,26 +18,13 @@ static double factorial(int n) {
     return result;
 }
 
-int abs(double x) {
-    if (x < 0) {
-        return -x;
-    }
-    return x;
-}
+int abs(int x) { return (x < 0) ? -x : x; }
 
 double acos(double x) {
-    if (x < -1.0 || x > 1.0) {
-        return NAN;
-    }
-    return atan2(sqrt(1.0 - x * x), x);
+    return (x >= -1.0 && x <= 1.0) ? atan2(sqrt(1.0 - x * x), x) : NAN;
 }
 
-double acosh(double x) {
-    if (x < 1.0) {
-        return NAN;
-    }
-    return log(x + sqrt(x * x - 1.0));
-}
+double acosh(double x) { return (x >= 1.0) ? log(x + sqrt(x * x - 1.0)) : NAN; }
 
 double asin(double x) {
     if (x < -1.0 || x > 1.0) {
@@ -86,11 +73,7 @@ double atan2(double y, double x) {
 }
 
 double atanh(double x) {
-    if (x <= -1.0 || x >= 1.0) {
-        return NAN;
-    }
-
-    return 0.5 * log((1.0 + x) / (1.0 - x));
+    return (x > -1.0 && x < 1.0) ? 0.5 * log((1.0 + x) / (1.0 - x)) : NAN;
 }
 
 double cbrt(double x) {
@@ -176,12 +159,7 @@ double log(double x) {
     return 2 * result;
 }
 
-double log10(double x) {
-    if (x <= 0) {
-        return NAN;
-    }
-    return log(x) / log(10.0);
-}
+double log10(double x) { return (x > 0) ? log(x) / log(10.0) : NAN; }
 
 double pow(double x, double y) {
     for (int i = 1; i < y; i++) {
@@ -229,10 +207,4 @@ double tan(double x) { return sin(x) / cos(x); }
 
 double tanh(double x) { return sinh(x) / cosh(x); }
 
-int round(double x) {
-    if (x < 0) {
-        return (int)(x - 0.5);
-    } else {
-        return (int)(x + 0.5);
-    }
-}
+int round(double x) { return (x < 0) ? (int)(x - 0.5) : (int)(x + 0.5); }
