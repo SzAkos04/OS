@@ -46,20 +46,6 @@ void fill_screen(u8 VGA_COLOR) {
     }
 }
 
-void clear_screen(void) { fill_screen(COLOR(0, 0, 0)); }
-
-static void draw_h_line(int x1, int x2, int y, u8 VGA_COLOR) {
-    for (int x = x1; x <= x2; x++) {
-        back_buf[y][x] = VGA_COLOR;
-    }
-}
-
-static void draw_v_line(int x, int y1, int y2, u8 VGA_COLOR) {
-    for (int y = y1; y <= y2; y++) {
-        back_buf[y][x] = VGA_COLOR;
-    }
-}
-
 void draw_line(int x1, int y1, int x2, int y2, u8 VGA_COLOR) {
     int dx = x2 - x1;
     int dy = y2 - y1;
@@ -79,15 +65,15 @@ void draw_line(int x1, int y1, int x2, int y2, u8 VGA_COLOR) {
 }
 
 void draw_rect(int x1, int y1, int x2, int y2, u8 VGA_COLOR) {
-    draw_h_line(x1, x2, y1, VGA_COLOR);
-    draw_h_line(x1, x2, y2, VGA_COLOR);
-    draw_v_line(x1, y1, y2, VGA_COLOR);
-    draw_v_line(x2, y1, y2, VGA_COLOR);
+    draw_line(x1, y1, x2, y1, VGA_COLOR);
+    draw_line(x1, y2, x2, y2, VGA_COLOR);
+    draw_line(x1, y1, x1, y2, VGA_COLOR);
+    draw_line(x2, y1, x2, y2, VGA_COLOR);
 }
 
 void fill_rect(int x1, int y1, int x2, int y2, u8 VGA_COLOR) {
     for (int y = y1; y <= y2; y++) {
-        draw_h_line(x1, x2, y, VGA_COLOR);
+        draw_line(x1, y, x2, y, VGA_COLOR);
     }
 }
 

@@ -5,7 +5,7 @@
 #include "utils.h"
 #define FONT_SIZE 8
 
-#define FONT_WIDTH(str) strlen(str) * FONT_SIZE
+#define TEXT_WIDTH(str) strlen(str) * FONT_SIZE
 
 // Define bitmap fonts for ASCII characters (8x8 pixels)
 static const u8 font[128][FONT_SIZE] = {
