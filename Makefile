@@ -14,7 +14,7 @@ OBJ := $(BUILD_DIR)/kernel_entry.o
 OBJ += $(patsubst $(SRC_DIR)/%.c, $(BUILD_DIR)/%.o, $(C_SRC))
 BOOTLOADER := $(SRC_DIR)/bootloader.asm
 KERNEL_ENTRY := $(SRC_DIR)/kernel/kernel_entry.asm
-ISO := $(BUILD_DIR)/boot/boot.iso
+ISO := $(BUILD_DIR)/boot/boot.img
 .PHONY: all build run clean
 
 all: build
