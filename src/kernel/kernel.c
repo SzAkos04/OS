@@ -1,10 +1,10 @@
+#include "font.h"
 #include "screen.h"
 
 #include <cmath.h>
 #include <cstdbool.h>
 
-#if 1
-
+#if 0
 bool is_prime(int n) {
     if (n < 2) {
         return false;
@@ -24,20 +24,27 @@ void _main_c() {
     while (1) {
         clear_buffer();
 
-#if 1
+#if 0
         for (int y = 0; y < SCREEN_HEIGHT; ++y) {
-            for (int x = 0; x < SCREEN_WIDTH; ++x) {
-                if (is_prime(y * SCREEN_WIDTH + x)) {
-                    draw_pixel(x, y, WHITE);
+            draw_line(0, y, SCREEN_WIDTH, y, y % 256);
+        }
+#elif 0
+        int x = 0;
+        int y = 0;
+        for (int i = 32; i <= 126; ++i) {
+            char str[2] = {i, '\0'};
+            print_string(str, x, y, WHITE);
+
+            x += TEXT_WIDTH(str);
+            if (x + TEXT_WIDTH(str) > SCREEN_WIDTH) {
+                x = 0;
+                y += FONT_SIZE;
+                if (y + FONT_SIZE > SCREEN_HEIGHT) {
+                    break;
                 }
             }
         }
-#elif 0
-        for (int i = 0; i < SCREEN_WIDTH; ++i) {
-            draw_pixel(i, 5, MAGENTA);
-        }
-        draw_line(0, 0, 100, 100, MAGENTA);
-        print_string("hi", 0, 0, WHITE);
+#elif 1
         draw_rect(25, 50, 75, 100, MAGENTA);
         draw_line(25, 50, 50, 75, BLUE);
         draw_line(25, 100, 50, 125, GREEN);
@@ -57,19 +64,10 @@ void _main_c() {
                      SCREEN_HEIGHT / 2 - FONT_SIZE / 2, WHITE);
 
 #elif 0
-
-        int x = 0;
-        int y = 0;
-        for (int i = 32; i <= 126; ++i) {
-            char str[2] = {i, '\0'};
-            print_string(str, x, y, WHITE);
-
-            x += TEXT_WIDTH(str);
-            if (x + TEXT_WIDTH(str) > SCREEN_WIDTH) {
-                x = 0;
-                y += FONT_SIZE;
-                if (y + FONT_SIZE > SCREEN_HEIGHT) {
-                    break;
+        for (int y = 0; y < SCREEN_HEIGHT; ++y) {
+            for (int x = 0; x < SCREEN_WIDTH; ++x) {
+                if (is_prime(y * SCREEN_WIDTH + x)) {
+                    draw_pixel(x, y, WHITE);
                 }
             }
         }
