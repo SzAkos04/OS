@@ -22,7 +22,10 @@ extern u8 back_buf[SCREEN_HEIGHT][SCREEN_WIDTH];
 
 void screen_init(void);
 
-void putpixel(int pos_x, int pos_y, u8 VGA_COLOR);
+// only used to draw to the front buffer
+static inline void putpixel(int x, int y, u8 VGA_COLOR);
+
+void draw_pixel(int x, int y, u8 VGA_COLOR);
 
 void fill_screen(u8 VGA_COLOR);
 
@@ -31,8 +34,8 @@ void draw_line(int x1, int y1, int x2, int y2, u8 VGA_COLOR);
 void draw_rect(int x1, int y1, int x2, int y2, u8 VGA_COLOR);
 void fill_rect(int x1, int y1, int x2, int y2, u8 VGA_COLOR);
 
+void draw_char(char ch, int x, int y, u8 VGA_COLOR);
 void print_string(const char *str, int x, int y, u8 VGA_COLOR);
 
-// double buffer stuff
 void clear_buffer(void);
 void swap_buffers(void);

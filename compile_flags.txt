@@ -1,0 +1,5 @@
+ -ffreestanding
+ -fno-pie
+ -fno-builtin
+ -nostdlib
+ -Isrc/libc
