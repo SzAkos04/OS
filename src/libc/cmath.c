@@ -59,17 +59,17 @@ double atan(double x) {
 double atan2(double y, double x) {
     if (x > 0) {
         return atan(y / x);
-    } else if (x < 0 && y >= 0) {
-        return atan(y / x) + M_PI;
-    } else if (x < 0 && y < 0) {
-        return atan(y / x) - M_PI;
-    } else if (x == 0 && y > 0) {
-        return M_PI / 2;
-    } else if (x == 0 && y < 0) {
-        return -M_PI / 2;
-    } else {
-        return NAN;
+    } else if (x < 0) {
+        return atan(y / x) + (y >= 0 ? M_PI : -M_PI);
+    } else if (x == 0) {
+        if (y > 0) {
+            return M_PI / 2;
+        }
+        if (y < 0) {
+            return -M_PI / 2;
+        }
     }
+    return NAN;
 }
 
 double atanh(double x) {
