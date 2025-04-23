@@ -5,18 +5,33 @@
 #define SCREEN_WIDTH 320
 #define SCREEN_HEIGHT 200
 
-#define COLOR(_r, _g, _b)                                                      \
-    ((u8)((((_r) & 0x7) << 5) | (((_g) & 0x7) << 2) | (((_b) & 0x3) << 0)))
+// Bit masks and shifts for color channels in RRRGGGBB format
+#define RED_SHIFT 5
+#define GREEN_SHIFT 2
+#define BLUE_SHIFT 0
 
-#define BLACK COLOR(0, 0, 0)
-#define WHITE COLOR(7, 7, 3)
-#define RED COLOR(7, 0, 0)
-#define GREEN COLOR(0, 7, 0)
-#define BLUE COLOR(0, 0, 3)
+#define RED_MASK 0x7
+#define GREEN_MASK 0x7
+#define BLUE_MASK 0x3
 
-#define YELLOW COLOR(7, 7, 0)
-#define MAGENTA COLOR(7, 0, 3)
-#define CYAN COLOR(0, 7, 3)
+#define RED_BITS 3
+#define GREEN_BITS 3
+#define BLUE_BITS 2
+
+#define COLOR_RGB(_r, _g, _b)                                                  \
+    ((u8)((((_r) >> (8 - RED_BITS)) << RED_SHIFT) |                            \
+          (((_g) >> (8 - GREEN_BITS)) << GREEN_SHIFT) |                        \
+          (((_b) >> (8 - BLUE_BITS)) << BLUE_SHIFT)))
+
+#define BLACK COLOR_RGB(0, 0, 0)
+#define WHITE COLOR_RGB(255, 255, 255)
+#define RED COLOR_RGB(255, 0, 0)
+#define GREEN COLOR_RGB(0, 255, 0)
+#define BLUE COLOR_RGB(0, 0, 255)
+
+#define YELLOW COLOR_RGB(255, 255, 0)
+#define MAGENTA COLOR_RGB(255, 0, 255)
+#define CYAN COLOR_RGB(0, 255, 255)
 
 extern u8 back_buf[SCREEN_HEIGHT][SCREEN_WIDTH];
 
