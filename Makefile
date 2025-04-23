@@ -1,7 +1,7 @@
 PROJECT := OS
 ASM := nasm
 CC := gcc
-CFLAGS := -m32 -ffreestanding -fno-pie -fno-builtin -nostdlib -Isrc/libc
+CFLAGS := -m32 -ffreestanding -fno-pie -fno-builtin -fno-stack-protector -nostdlib -Isrc/libc
 LD := ld
 LDFLAGS := -melf_i386 -Ttext 0x1000 --oformat binary
 QEMU := qemu-system-i386

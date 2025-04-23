@@ -1,11 +1,11 @@
 #include "screen.h"
 
+#include "font.h"
+#include "utils.h"
+
 #include <cctype.h>
 #include <cmath.h>
 #include <cstdbool.h>
-
-#include "font.h"
-#include "utils.h"
 
 #define VIDEO_ADDRESS 0xa0000
 
