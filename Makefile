@@ -5,9 +5,9 @@ CFLAGS := -m32 -ffreestanding -fno-pie -fno-builtin -fno-stack-protector -nostdl
 LD := ld
 LDFLAGS := -melf_i386 -Ttext 0x1000 --oformat binary
 QEMU := qemu-system-i386
-QEMUFLAGS := -drive if=floppy,format=raw
+QEMUFLAGS_DEFAULT := -drive if=floppy,format=raw
 ifeq ($(CI),true)
-QEMUFLAGS += -nographic -serial mon:stdio -no-reboot -no-shutdown
+QEMUFLAGS := -nographic -serial mon:stdio -no-reboot -no-shutdown
 endif
 SRC_DIR := src
 BUILD_DIR := build
@@ -50,7 +50,7 @@ $(BUILD_DIR)/kernel.bin: $(OBJ)
 	$(LD) $(LDFLAGS) $^ -o $@
 
 run: $(ISO)
-	$(QEMU) $(QEMUFLAGS),file=$<
+	$(QEMU) $(QEMUFLAGS) $(QEMUFLAGS_DEFAULT),file=$<
 
 clean:
 	rm -rf $(BUILD_DIR)
