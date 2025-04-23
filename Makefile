@@ -1,4 +1,4 @@
-PROJECT := OS
+PROJECT := SillyOS
 ASM := nasm
 CC := gcc
 CFLAGS := -m32 -ffreestanding -fno-pie -fno-builtin -fno-stack-protector -nostdlib -Isrc/libc
