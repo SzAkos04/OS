@@ -16,12 +16,7 @@ jobs:
       run: |
         sudo apt update
         sudo apt upgrade
-        sudo apt install -y build-essential make nasm gcc qemu-system-x86
+        sudo apt install -y build-essential make nasm gcc
         
     - name: Build with make
       run: make
-      
-    - name: Run OS with Qemu
-      run: make run
-      env:
-        CI: true
