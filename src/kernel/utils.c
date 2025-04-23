@@ -1,21 +1,21 @@
 #include "utils.h"
 
-byte inportb(u16 port) {
+byte inportb(uint16_t port) {
     byte result;
     asm("in %%dx, %%al" : "=a"(result) : "d"(port));
     return result;
 }
 
-void outportb(u16 port, u8 data) {
+void outportb(uint16_t port, uint8_t data) {
     asm("out %%al, %%dx" : : "a"(data), "d"(port));
 }
 
-u8 inportw(u16 port) {
-    u16 result;
+uint8_t inportw(uint16_t port) {
+    uint16_t result;
     asm("in %%dx, %%ax" : "=a"(result) : "d"(port));
     return result;
 }
 
-void outportw(u16 port, u16 data) {
+void outportw(uint16_t port, uint16_t data) {
     asm("out %%ax, %%dx" : : "a"(data), "d"(port));
 }

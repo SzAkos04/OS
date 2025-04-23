@@ -1,21 +1,17 @@
+#pragma once
+
+#include <cstdint.h>
+
 #define asm __asm__
 #define CLI() asm("cli")
 #define STI() asm("sti")
 
 typedef unsigned char byte;
 
-typedef byte u8;
-typedef unsigned short u16;
-typedef unsigned int u32;
-typedef char i8;
-typedef short i16;
-typedef int i32;
-typedef u32 size_t;
+byte inportb(uint16_t port);
 
-byte inportb(u16 port);
+void outportb(uint16_t port, uint8_t data);
 
-void outportb(u16 port, u8 data);
+uint8_t inportw(uint16_t port);
 
-u8 inportw(u16 port);
-
-void outportw(u16 port, u16 data);
+void outportw(uint16_t port, uint16_t data);

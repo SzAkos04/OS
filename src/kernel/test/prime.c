@@ -14,11 +14,12 @@ bool is_prime(int n) {
     }
     return true;
 }
-void prime_screen() {
+
+void prime_screen(void) {
     for (int y = 0; y < SCREEN_HEIGHT; ++y) {
         for (int x = 0; x < SCREEN_WIDTH; ++x) {
             if (is_prime(y * SCREEN_WIDTH + x)) {
-                draw_pixel(x, y, WHITE);
+                draw_pixel(point_new(x, y), WHITE);
             }
         }
     }

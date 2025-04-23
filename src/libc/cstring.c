@@ -7,3 +7,11 @@ size_t strlen(const char *str) {
     }
     return l;
 }
+
+void memset(void *dst, uint8_t value, size_t n) {
+    uint8_t *d = dst;
+
+    while (n-- > 0) {
+        *d++ = value;
+    }
+}

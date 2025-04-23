@@ -6,6 +6,7 @@
 #include <cctype.h>
 #include <cmath.h>
 #include <cstdbool.h>
+#include <cstdint.h>
 
 #define VIDEO_ADDRESS 0xa0000
 
@@ -17,23 +18,25 @@
 
 #define DAC_MAX 63
 
-u8 back_buf[SCREEN_HEIGHT][SCREEN_WIDTH];
+point_t point_new(int x, int y) { return (point_t){x, y}; }
 
-static inline bool in_bound(int x, int y) {
-    return x >= 0 && x < SCREEN_WIDTH && y >= 0 && y < SCREEN_HEIGHT;
+uint8_t back_buf[SCREEN_HEIGHT][SCREEN_WIDTH];
+
+static inline bool in_bound(point_t p) {
+    return p.x >= 0 && p.x < SCREEN_WIDTH && p.y >= 0 && p.y < SCREEN_HEIGHT;
 }
 
 void screen_init() {
     outportb(PALETTE_MASK, 0xFF);
     outportb(PALETTE_WRITE, 0);
 
-    for (u8 i = 0; i < 255; i++) {
-        u8 r =
+    for (uint8_t i = 0; i < 255; i++) {
+        uint8_t r =
             (((i >> RED_SHIFT) & RED_MASK) * (DAC_MAX + 1)) / (1 << RED_BITS);
-        u8 g = (((i >> GREEN_SHIFT) & GREEN_MASK) * (DAC_MAX + 1)) /
-               (1 << GREEN_BITS);
-        u8 b = (((i >> BLUE_SHIFT) & BLUE_MASK) * (DAC_MAX + 1)) /
-               (1 << BLUE_BITS);
+        uint8_t g = (((i >> GREEN_SHIFT) & GREEN_MASK) * (DAC_MAX + 1)) /
+                    (1 << GREEN_BITS);
+        uint8_t b = (((i >> BLUE_SHIFT) & BLUE_MASK) * (DAC_MAX + 1)) /
+                    (1 << BLUE_BITS);
 
         outportb(PALETTE_DATA, r);
         outportb(PALETTE_DATA, g);
@@ -46,75 +49,75 @@ void screen_init() {
     outportb(PALETTE_DATA, DAC_MAX);
 }
 
-static inline void putpixel(int x, int y, u8 VGA_COLOR) {
-    if (!in_bound(x, y)) {
+static inline void putpixel(point_t p, uint8_t VGA_COLOR) {
+    if (!in_bound(p)) {
         return;
     }
-    u8 *location = (u8 *)VIDEO_ADDRESS + SCREEN_WIDTH * y + x;
+    uint8_t *location = (uint8_t *)VIDEO_ADDRESS + SCREEN_WIDTH * p.y + p.x;
     *location = VGA_COLOR;
 }
 
-void draw_pixel(int x, int y, u8 VGA_COLOR) {
-    if (!in_bound(x, y)) {
+void draw_pixel(point_t p, uint8_t VGA_COLOR) {
+    if (!in_bound(p)) {
         return;
     }
-    back_buf[y][x] = VGA_COLOR;
+    back_buf[p.y][p.x] = VGA_COLOR;
 }
 
-void fill_screen(u8 VGA_COLOR) {
+void fill_screen(uint8_t VGA_COLOR) {
     for (int y = 0; y < SCREEN_HEIGHT; y++) {
         for (int x = 0; x < SCREEN_WIDTH; x++) {
-            draw_pixel(x, y, VGA_COLOR);
+            draw_pixel(point_new(x, y), VGA_COLOR);
         }
     }
 }
 
-void draw_line(int x0, int y0, int x1, int y1, u8 VGA_COLOR) {
-    int dx = abs(x1 - x0), sx = x0 < x1 ? 1 : -1;
-    int dy = -abs(y1 - y0), sy = y0 < y1 ? 1 : -1;
+void draw_line(point_t p1, point_t p2, uint8_t VGA_COLOR) {
+    int dx = abs(p2.x - p1.x), sx = p1.x < p2.x ? 1 : -1;
+    int dy = -abs(p2.y - p1.y), sy = p1.y < p2.y ? 1 : -1;
     int err = dx + dy;
 
     while (1) {
-        draw_pixel(x0, y0, VGA_COLOR);
-        if (x0 == x1 && y0 == y1) {
+        draw_pixel(p1, VGA_COLOR);
+        if (p1.x == p2.x && p1.y == p2.y) {
             break;
         }
         int e2 = 2 * err;
         if (e2 >= dy) {
             err += dy;
-            x0 += sx;
+            p1.x += sx;
         }
         if (e2 <= dx) {
             err += dx;
-            y0 += sy;
+            p1.y += sy;
         }
     }
 }
 
-void draw_rect(int x1, int y1, int x2, int y2, u8 VGA_COLOR) {
-    int min_x = x1 < x2 ? x1 : x2;
-    int max_x = x1 > x2 ? x1 : x2;
-    int min_y = y1 < y2 ? y1 : y2;
-    int max_y = y1 > y2 ? y1 : y2;
+void draw_rect(point_t p1, point_t p2, uint8_t VGA_COLOR) {
+    int min_x = p1.x < p2.x ? p1.x : p2.x;
+    int max_x = p1.x > p2.x ? p1.x : p2.x;
+    int min_y = p1.y < p2.y ? p1.y : p2.y;
+    int max_y = p1.y > p2.y ? p1.y : p2.y;
 
-    draw_line(min_x, min_y, max_x, min_y, VGA_COLOR);
-    draw_line(min_x, max_y, max_x, max_y, VGA_COLOR);
-    draw_line(min_x, min_y, min_x, max_y, VGA_COLOR);
-    draw_line(max_x, min_y, max_x, max_y, VGA_COLOR);
+    draw_line(point_new(min_x, min_y), point_new(max_x, min_y), VGA_COLOR);
+    draw_line(point_new(min_x, max_y), point_new(max_x, max_y), VGA_COLOR);
+    draw_line(point_new(min_x, min_y), point_new(min_x, max_y), VGA_COLOR);
+    draw_line(point_new(max_x, min_y), point_new(max_x, max_y), VGA_COLOR);
 }
 
-void fill_rect(int x1, int y1, int x2, int y2, u8 VGA_COLOR) {
-    int min_x = x1 < x2 ? x1 : x2;
-    int max_x = x1 > x2 ? x1 : x2;
-    int min_y = y1 < y2 ? y1 : y2;
-    int max_y = y1 > y2 ? y1 : y2;
+void fill_rect(point_t p1, point_t p2, uint8_t VGA_COLOR) {
+    int min_x = p1.x < p2.x ? p1.x : p2.x;
+    int max_x = p1.x > p2.x ? p1.x : p2.x;
+    int min_y = p1.y < p2.y ? p1.y : p2.y;
+    int max_y = p1.y > p2.y ? p1.y : p2.y;
 
     for (int y = min_y; y <= max_y; y++) {
-        draw_line(min_x, y, max_x, y, VGA_COLOR);
+        draw_line(point_new(min_x, y), point_new(max_x, y), VGA_COLOR);
     }
 }
 
-void draw_char(char ch, int x, int y, u8 VGA_COLOR) {
+void draw_char(char ch, point_t p, uint8_t VGA_COLOR) {
     if (!isprint(ch)) {
         return;
     }
@@ -122,21 +125,21 @@ void draw_char(char ch, int x, int y, u8 VGA_COLOR) {
     for (int i = 0; i < FONT_SIZE; i++) {
         for (int j = 0; j < FONT_SIZE; j++) {
             if (font[(unsigned char)ch][i] & (1 << j)) {
-                draw_pixel(x + j, y + i, VGA_COLOR);
+                draw_pixel(point_new(p.x + j, p.y + i), VGA_COLOR);
             }
         }
     }
 }
 
-void print_string(const char *str, int x, int y, u8 VGA_COLOR) {
+void print_string(const char *str, point_t p, uint8_t VGA_COLOR) {
     int offset = 0;
     while (*str) {
         char ch = *str++;
         if (ch == '\n') {
-            y += FONT_SIZE;
+            p.y += FONT_SIZE;
             offset = 0;
         } else {
-            draw_char(ch, x + offset, y, VGA_COLOR);
+            draw_char(ch, point_new(p.x + offset, p.y), VGA_COLOR);
             offset += FONT_SIZE;
         }
     }
@@ -147,7 +150,7 @@ void clear_buffer(void) { fill_screen(BLACK); }
 void swap_buffers(void) {
     for (int y = 0; y < SCREEN_HEIGHT; y++) {
         for (int x = 0; x < SCREEN_WIDTH; x++) {
-            putpixel(x, y, back_buf[y][x]);
+            putpixel(point_new(x, y), back_buf[y][x]);
         }
     }
 }

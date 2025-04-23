@@ -14,6 +14,8 @@ BUILD_DIR := build
 C_SRC := $(shell find $(SRC_DIR) -type f -name '*.c')
 # this must be first, otherwise it breaks during linking
 OBJ := $(BUILD_DIR)/kernel_entry.o
+OBJ += $(BUILD_DIR)/kernel/idt_load.o
+OBJ += $(BUILD_DIR)/kernel/interrupts.o
 OBJ += $(patsubst $(SRC_DIR)/%.c, $(BUILD_DIR)/%.o, $(C_SRC))
 BOOTLOADER := $(SRC_DIR)/bootloader.asm
 KERNEL_ENTRY := $(SRC_DIR)/kernel/kernel_entry.asm
@@ -36,6 +38,16 @@ $(BUILD_DIR)/bootloader.bin: $(BOOTLOADER)
 
 # compile the kernel entry
 $(BUILD_DIR)/kernel_entry.o: $(KERNEL_ENTRY)
+	@mkdir -p $(@D)
+	$(ASM) -f elf32 $< -o $@
+
+# compile idt_load
+$(BUILD_DIR)/kernel/idt_load.o: $(SRC_DIR)/kernel/idt_load.asm
+	@mkdir -p $(@D)
+	$(ASM) -f elf32 $< -o $@
+
+# compile interrupts
+$(BUILD_DIR)/kernel/interrupts.o: $(SRC_DIR)/kernel/interrupts.asm
 	@mkdir -p $(@D)
 	$(ASM) -f elf32 $< -o $@
 

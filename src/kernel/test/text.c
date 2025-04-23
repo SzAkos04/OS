@@ -8,7 +8,7 @@ void text_screen(void) {
     int y = 0;
     for (int i = 32; i <= 126; ++i) {
         char str[2] = {i, '\0'};
-        print_string(str, x, y, WHITE);
+        print_string(str, point_new(x, y), WHITE);
 
         x += TEXT_WIDTH(str);
         if (x + TEXT_WIDTH(str) > SCREEN_WIDTH) {
