@@ -1,0 +1,25 @@
+name: C/C++ CI
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Install dependencies
+      run: |
+        sudo apt update
+        sudo apt upgrade
+        sudo apt install -y build-essential make nasm gcc qemu-system-x86
+        
+    - name: Build with make
+      run: make
+      
+    - name: Run OS with Qemu
+      run: make run
