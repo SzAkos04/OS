@@ -6,6 +6,9 @@ LD := ld
 LDFLAGS := -melf_i386 -Ttext 0x1000 --oformat binary
 QEMU := qemu-system-i386
 QEMUFLAGS := -drive if=floppy,format=raw
+ifeq ($(CI),true)
+QEMUFLAGS += -nographic -serial mon:stdio -no-reboot -no-shutdown
+endif
 SRC_DIR := src
 BUILD_DIR := build
 C_SRC := $(shell find $(SRC_DIR) -type f -name '*.c')
