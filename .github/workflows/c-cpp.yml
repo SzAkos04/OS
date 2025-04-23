@@ -23,3 +23,5 @@ jobs:
       
     - name: Run OS with Qemu
       run: make run
+      env:
+        CI: true
