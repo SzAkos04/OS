@@ -7,9 +7,6 @@
 #define PIT_CHANNEL_0 0x40
 #define PIT_CONTROL_REG 0x43
 
-#define PIT_MASK 0xFF
-#define PIT_SET 0x36
-
 #define PIT_FREQ 1193181
 #define TIMER_FREQ 363
 
@@ -25,25 +22,22 @@ static struct {
 
 uint32_t timer_get(void) { return state.ticks; }
 
-static void timer_handler(struct Registers *regs) {
-    state.ticks++;
-    outportb(0x20, 0x20);
-}
+static void timer_handler(struct Registers *regs) { state.ticks++; }
 
 void timer_init(void) {
     const uint32_t freq = REAL_FREQ_OF_FREQ(TIMER_FREQ);
     state.frequency = freq;
-    state.divisor = DIV_OF_FREQ(freq);
+    uint16_t divisor = (uint16_t)(PIT_FREQ / freq);
+    state.divisor = divisor;
     state.ticks = 0;
 
-    outportb(PIT_CONTROL_REG, PIT_SET);
+    outportb(PIT_CONTROL_REG, 0x36);
 
-    uint16_t divisor = (uint16_t)(PIT_FREQ / TIMER_FREQ);
-    outportb(PIT_CHANNEL_0, divisor & PIT_MASK);
+    outportb(PIT_CHANNEL_0, (uint8_t)(divisor & 0xFF));
+    outportb(PIT_CHANNEL_0, (uint8_t)(divisor >> 8));
 
-    // BUG: If i comment out the next two lines, the rendering returns, so the
-    // problem must be somewhere here
-    outportb(PIT_CHANNEL_0, (divisor >> 8) & PIT_MASK);
+    // BUG: If i comment out the next line, the rendering returns, so the
+    // problem must be around here, otherwise, the kernel crashes
 
-    irq_install(0, timer_handler);
+    // irq_install(0, timer_handler);
 }

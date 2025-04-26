@@ -53,289 +53,74 @@
 
 	; Macros are unfolded manually
 
-_isr0:
+	%macro ISR_NO_ERR 1
+	global _isr%1
+
+_isr%1:
 	cli
 	push dword 0
-	push dword 0
+	push dword %1
 	jmp  isr_common
+%endmacro
 
-_isr1:
+%macro ISR_ERR 1
+global _isr%1
+
+_isr%1:
 	cli
-	push dword 0
-	push dword 1
+	push dword %1
 	jmp  isr_common
+%endmacro
 
-_isr2:
-	cli
-	push dword 0
-	push dword 2
-	jmp  isr_common
-
-_isr3:
-	cli
-	push dword 0
-	push dword 3
-	jmp  isr_common
-
-_isr4:
-	cli
-	push dword 0
-	push dword 4
-	jmp  isr_common
-
-_isr5:
-	cli
-	push dword 0
-	push dword 5
-	jmp  isr_common
-
-_isr6:
-	cli
-	push dword 0
-	push dword 6
-	jmp  isr_common
-
-_isr7:
-	cli
-	push dword 0
-	push dword 7
-	jmp  isr_common
-
-_isr8:
-	cli
-	push dword 8
-	jmp  isr_common
-
-_isr9:
-	cli
-	push dword 0
-	push dword 9
-	jmp  isr_common
-
-_isr10:
-	cli
-	push dword 10
-	jmp  isr_common
-
-_isr11:
-	cli
-	push dword 11
-	jmp  isr_common
-
-_isr12:
-	cli
-	push dword 12
-	jmp  isr_common
-
-_isr13:
-	cli
-	push dword 13
-	jmp  isr_common
-
-_isr14:
-	cli
-	push dword 14
-	jmp  isr_common
-
-_isr15:
-	cli
-	push dword 0
-	push dword 15
-	jmp  isr_common
-
-_isr16:
-	cli
-	push dword 0
-	push dword 16
-	jmp  isr_common
-
-_isr17:
-	cli
-	push dword 0
-	push dword 17
-	jmp  isr_common
-
-_isr18:
-	cli
-	push dword 0
-	push dword 18
-	jmp  isr_common
-
-_isr19:
-	cli
-	push dword 0
-	push dword 19
-	jmp  isr_common
-
-_isr20:
-	cli
-	push dword 0
-	push dword 20
-	jmp  isr_common
-
-_isr21:
-	cli
-	push dword 0
-	push dword 21
-	jmp  isr_common
-
-_isr22:
-	cli
-	push dword 0
-	push dword 22
-	jmp  isr_common
-
-_isr23:
-	cli
-	push dword 0
-	push dword 23
-	jmp  isr_common
-
-_isr24:
-	cli
-	push dword 0
-	push dword 24
-	jmp  isr_common
-
-_isr25:
-	cli
-	push dword 0
-	push dword 25
-	jmp  isr_common
-
-_isr26:
-	cli
-	push dword 0
-	push dword 26
-	jmp  isr_common
-
-_isr27:
-	cli
-	push dword 0
-	push dword 27
-	jmp  isr_common
-
-_isr28:
-	cli
-	push dword 0
-	push dword 28
-	jmp  isr_common
-
-_isr29:
-	cli
-	push dword 0
-	push dword 29
-	jmp  isr_common
-
-_isr30:
-	cli
-	push dword 0
-	push dword 30
-	jmp  isr_common
-
-_isr31:
-	cli
-	push dword 0
-	push dword 31
-	jmp  isr_common
-
-_isr32:
-	cli
-	push dword 0
-	push dword 32
-	jmp  isr_common
-
-_isr33:
-	cli
-	push dword 0
-	push dword 33
-	jmp  isr_common
-
-_isr34:
-	cli
-	push dword 0
-	push dword 34
-	jmp  isr_common
-
-_isr35:
-	cli
-	push dword 0
-	push dword 35
-	jmp  isr_common
-
-_isr36:
-	cli
-	push dword 0
-	push dword 36
-	jmp  isr_common
-
-_isr37:
-	cli
-	push dword 0
-	push dword 37
-	jmp  isr_common
-
-_isr38:
-	cli
-	push dword 0
-	push dword 38
-	jmp  isr_common
-
-_isr39:
-	cli
-	push dword 0
-	push dword 39
-	jmp  isr_common
-
-_isr40:
-	cli
-	push dword 0
-	push dword 40
-	jmp  isr_common
-
-_isr41:
-	cli
-	push dword 0
-	push dword 41
-	jmp  isr_common
-
-_isr42:
-	cli
-	push dword 0
-	push dword 42
-	jmp  isr_common
-
-_isr43:
-	cli
-	push dword 0
-	push dword 43
-	jmp  isr_common
-
-_isr44:
-	cli
-	push dword 0
-	push dword 44
-	jmp  isr_common
-
-_isr45:
-	cli
-	push dword 0
-	push dword 45
-	jmp  isr_common
-
-_isr46:
-	cli
-	push dword 0
-	push dword 46
-	jmp  isr_common
-
-_isr47:
-	cli
-	push dword 0
-	push dword 47
-	jmp  isr_common
-
-	; The common handler
+	; Now declare each ISR
+	ISR_NO_ERR 0
+	ISR_NO_ERR 1
+	ISR_NO_ERR 2
+	ISR_NO_ERR 3
+	ISR_NO_ERR 4
+	ISR_NO_ERR 5
+	ISR_NO_ERR 6
+	ISR_NO_ERR 7
+	ISR_ERR    8
+	ISR_NO_ERR 9
+	ISR_ERR   10
+	ISR_ERR   11
+	ISR_ERR   12
+	ISR_ERR   13
+	ISR_ERR   14
+	ISR_NO_ERR 15
+	ISR_NO_ERR 16
+	ISR_NO_ERR 17
+	ISR_NO_ERR 18
+	ISR_NO_ERR 19
+	ISR_NO_ERR 20
+	ISR_NO_ERR 21
+	ISR_NO_ERR 22
+	ISR_NO_ERR 23
+	ISR_NO_ERR 24
+	ISR_NO_ERR 25
+	ISR_NO_ERR 26
+	ISR_NO_ERR 27
+	ISR_NO_ERR 28
+	ISR_NO_ERR 29
+	ISR_NO_ERR 30
+	ISR_NO_ERR 31
+	ISR_NO_ERR 32
+	ISR_NO_ERR 33
+	ISR_NO_ERR 34
+	ISR_NO_ERR 35
+	ISR_NO_ERR 36
+	ISR_NO_ERR 37
+	ISR_NO_ERR 38
+	ISR_NO_ERR 39
+	ISR_NO_ERR 40
+	ISR_NO_ERR 41
+	ISR_NO_ERR 42
+	ISR_NO_ERR 43
+	ISR_NO_ERR 44
+	ISR_NO_ERR 45
+	ISR_NO_ERR 46
+	ISR_NO_ERR 47
 
 isr_common:
 	pusha
@@ -359,7 +144,8 @@ isr_common:
 	pop fs
 	pop es
 	pop ds
+
 	popa
 
-	add esp, 8; remove pushed error code + interrupt number
+	add esp, 8
 	iretd
