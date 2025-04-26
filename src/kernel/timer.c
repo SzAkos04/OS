@@ -8,7 +8,6 @@
 #define PIT_CONTROL_REG 0x43
 
 #define PIT_FREQ 1193181
-#define TIMER_FREQ 363
 
 #define DIV_OF_FREQ(_f) (PIT_FREQ / (_f))
 #define FREQ_OF_DIV(_d) (PIT_FREQ / (_d))
@@ -22,7 +21,10 @@ static struct {
 
 uint32_t timer_get(void) { return state.ticks; }
 
-static void timer_handler(struct Registers *regs) { state.ticks++; }
+static void timer_handler(struct Registers *regs) {
+    state.ticks++;
+    outportb(0x20, 0x20); // send EOI to Master PIC
+}
 
 void timer_init(void) {
     const uint32_t freq = REAL_FREQ_OF_FREQ(TIMER_FREQ);
@@ -35,9 +37,6 @@ void timer_init(void) {
 
     outportb(PIT_CHANNEL_0, (uint8_t)(divisor & 0xFF));
     outportb(PIT_CHANNEL_0, (uint8_t)(divisor >> 8));
-
-    // BUG: if i comment out the next line, the crash disappears, so the problem
-    // must be around here
 
     irq_install(0, timer_handler);
 }

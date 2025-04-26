@@ -27,7 +27,7 @@ static void stub(struct Registers *regs) {
     }
 
     // send EOI
-    if (regs->int_no >= PIC2_OFFSET) { // PIC2_OFFSET == 0x28
+    if (regs->int_no >= 0x40) {
         outportb(PIC2, PIC_EOI);
     }
     outportb(PIC1, PIC_EOI);
@@ -63,7 +63,9 @@ void irq_install(size_t i, void (*handler)(struct Registers *)) {
     CLI();
     irq_handlers[i] = handler;
     irq_clear_mask(i);
-    STI();
+    // BUG: for some reason it only works if the interrupts are turned off
+
+    // STI();
 }
 
 void irq_init(void) {
