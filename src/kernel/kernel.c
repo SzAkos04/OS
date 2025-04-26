@@ -21,6 +21,20 @@ void panic(const char *msg) {
     }
 }
 
+void render(void) {
+    clear_buffer();
+
+    // color_screen();
+
+    // text_screen();
+
+    mixed_screen();
+
+    // prime_screen();
+
+    swap_buffers();
+}
+
 void _main_c(void) {
     idt_init();
     isr_init();
@@ -29,16 +43,6 @@ void _main_c(void) {
     timer_init();
 
     while (1) {
-        clear_buffer();
-
-        // color_screen();
-
-        // text_screen();
-
-        mixed_screen();
-
-        // prime_screen();
-
-        swap_buffers();
+        render();
     }
 }
