@@ -65,7 +65,7 @@ void irq_install(size_t i, void (*handler)(struct Registers *)) {
     irq_clear_mask(i);
     // BUG: for some reason it only works if the interrupts are turned off
 
-    // STI();
+    STI();
 }
 
 void irq_init(void) {

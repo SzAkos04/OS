@@ -123,7 +123,7 @@ _isr%1:
 	ISR_NO_ERR 47
 
 isr_common:
-	pusha
+	pushad
 	push ds
 	push es
 	push fs
@@ -145,7 +145,7 @@ isr_common:
 	pop es
 	pop ds
 
-	popa
+	popad
 
 	add esp, 8
 	iretd

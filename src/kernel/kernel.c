@@ -2,6 +2,7 @@
 #include "idt.h"
 #include "irq.h"
 #include "isr.h"
+#include "keyboard.h"
 #include "screen.h"
 #include "timer.h"
 
@@ -49,7 +50,8 @@ void _main_c(void) {
     isr_init();
     irq_init();
     screen_init();
-    timer_init();
+    // timer_init();
+    keyboard_init();
 
     uint32_t last_frame = 0, last = 0;
 
