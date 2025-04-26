@@ -63,36 +63,38 @@ static void (*stubs[NUM_ISRS])(struct Registers *) = {
     _isr40, _isr41, _isr42, _isr43, _isr44, _isr45, _isr46, _isr47,
 };
 
-static const char *exceptions[32] = {"Divide by zero",
-                                     "Debug",
-                                     "NMI",
-                                     "Breakpoint",
-                                     "Overflow",
-                                     "OOB",
-                                     "Invalid opcode",
-                                     "No coprocessor",
-                                     "Double fault",
-                                     "Coprocessor segment overrun",
-                                     "Bad TSS",
-                                     "Segment not present",
-                                     "Stack fault",
-                                     "General protection fault",
-                                     "Page fault",
-                                     "Unrecognized interrupt",
-                                     "Coprocessor fault",
-                                     "Alignment check",
-                                     "Machine check",
-                                     "RESERVED",
-                                     "RESERVED",
-                                     "RESERVED",
-                                     "RESERVED",
-                                     "RESERVED",
-                                     "RESERVED",
-                                     "RESERVED",
-                                     "RESERVED",
-                                     "RESERVED",
-                                     "RESERVED",
-                                     "RESERVED"};
+static const char *exceptions[32] = {
+    "Divide by zero",
+    "Debug",
+    "NMI",
+    "Breakpoint",
+    "Overflow",
+    "OOB",
+    "Invalid opcode",
+    "No coprocessor",
+    "Double fault",
+    "Coprocessor segment overrun",
+    "Bad TSS",
+    "Segment not present",
+    "Stack fault",
+    "General protection fault",
+    "Page fault",
+    "Unrecognized interrupt",
+    "Coprocessor fault",
+    "Alignment check",
+    "Machine check",
+    "RESERVED",
+    "RESERVED",
+    "RESERVED",
+    "RESERVED",
+    "RESERVED",
+    "RESERVED",
+    "RESERVED",
+    "RESERVED",
+    "RESERVED",
+    "RESERVED",
+    "RESERVED",
+};
 
 static struct {
     size_t index;
@@ -105,7 +107,6 @@ void isr_install(size_t i, void (*handler)(struct Registers *)) {
     handlers[i] = handler;
 }
 
-// referenced from start.S
 void isr_handler(struct Registers *regs) {
     if (handlers[regs->int_no]) {
         handlers[regs->int_no](regs);

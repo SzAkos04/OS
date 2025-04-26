@@ -24,11 +24,11 @@ void panic(const char *msg) {
 void render(void) {
     clear_buffer();
 
-    // color_screen();
+    color_screen();
 
     // text_screen();
 
-    mixed_screen();
+    // mixed_screen();
 
     // prime_screen();
 
