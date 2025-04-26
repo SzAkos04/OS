@@ -36,8 +36,8 @@ void timer_init(void) {
     outportb(PIT_CHANNEL_0, (uint8_t)(divisor & 0xFF));
     outportb(PIT_CHANNEL_0, (uint8_t)(divisor >> 8));
 
-    // BUG: If i comment out the next line, the rendering returns, so the
-    // problem must be around here, otherwise, the kernel crashes
+    // BUG: if i comment out the next line, the crash disappears, so the problem
+    // must be around here
 
-    // irq_install(0, timer_handler);
+    irq_install(0, timer_handler);
 }

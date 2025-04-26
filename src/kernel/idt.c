@@ -24,12 +24,13 @@ extern void idt_load();
 
 void idt_set(uint8_t index, void (*base)(struct Registers *), uint16_t selector,
              uint8_t flags) {
-    idt.entries[index] =
-        (struct IDTEntry){.offset_low = ((uintptr_t)base) & 0xFFFF,
-                          .offset_high = (((uintptr_t)base) >> 16) & 0xFFFF,
-                          .selector = selector,
-                          .type = flags | 0x60,
-                          .__ignored = 0};
+    idt.entries[index] = (struct IDTEntry){
+        .offset_low = ((uintptr_t)base) & 0xFFFF,
+        .offset_high = (((uintptr_t)base) >> 16) & 0xFFFF,
+        .selector = selector,
+        .type = flags | 0x60,
+        .__ignored = 0,
+    };
 }
 
 void idt_init() {
